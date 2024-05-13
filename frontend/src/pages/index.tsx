@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Country } from "./types/country.type";
 import Link from "next/link";
 import Input from "@/components/Input";
+import { Continent } from "./types/continent.type";
 
 const GET_COUNTRIES = gql`
     query getCountries {
@@ -28,12 +29,24 @@ const ADD_COUNTRY = gql`
     }
 `;
 
+const GET_CONTINENTS = gql`
+    query getContinents {
+        continents {
+            id
+            name
+        }
+    }
+`;
+
 export default function Home() {
     const [countries, setCountries] = useState<[Country] | null>(null);
+
+    const [continents, setContinents] = useState<[Continent] | null>(null);
 
     const [getCountries, { loading, error, data }] =
         useLazyQuery(GET_COUNTRIES);
     const [addCountry] = useMutation(ADD_COUNTRY);
+    const [getContinents] = useLazyQuery(GET_CONTINENTS);
 
     function fetchCountries() {
         getCountries({
@@ -70,6 +83,12 @@ export default function Home() {
 
     useEffect(() => {
         fetchCountries();
+        getContinents({
+            fetchPolicy: "network-only",
+            onCompleted: (data) => {
+                setContinents(data.continents);
+            },
+        });
     }, []);
 
     if (loading) return <p>Loading...</p>;
@@ -103,11 +122,32 @@ export default function Home() {
                                 type="text"
                                 name="country-emoji"
                             />
-                            <Input
-                                label="Country continent"
-                                type="number"
-                                name="country-continent"
-                            />
+                            <div className="w-full">
+                                <label
+                                    className="block mb-2 text-sm font-medium text-slate-900"
+                                    htmlFor="country-continent"
+                                >
+                                    Country continent
+                                </label>
+                                <select
+                                    name="country-continent"
+                                    className="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 outline-none"
+                                >
+                                    <option value="" disabled>
+                                        Select a continent
+                                    </option>
+                                    {continents &&
+                                        continents.length > 0 &&
+                                        continents.map((continent) => (
+                                            <option
+                                                key={continent.id}
+                                                value={continent.id}
+                                            >
+                                                {continent.name}
+                                            </option>
+                                        ))}
+                                </select>
+                            </div>
                         </div>
                         <button
                             type="submit"
