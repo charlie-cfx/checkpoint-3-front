@@ -3,6 +3,7 @@ import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { Country } from "./types/country.type";
 import Link from "next/link";
+import Input from "@/components/Input";
 
 const GET_COUNTRIES = gql`
     query getCountries {
@@ -92,64 +93,32 @@ export default function Home() {
                         onSubmit={handleSubmit}
                     >
                         <div className="flex gap-4">
-                            <div className="w-full">
-                                <label
-                                    htmlFor="country-code"
-                                    className="block mb-2 text-sm font-medium text-slate-900"
-                                >
-                                    Country code
-                                </label>
-                                <input
-                                    type="text"
-                                    name="country-code"
-                                    className="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 outline-none"
-                                />
-                            </div>
-                            <div className="w-full">
-                                <label
-                                    htmlFor="country-name"
-                                    className="block mb-2 text-sm font-medium text-slate-900"
-                                >
-                                    Country name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="country-name"
-                                    className="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 outline-none"
-                                />
-                            </div>
-                            <div className="w-full">
-                                <label
-                                    htmlFor="country-emoji"
-                                    className="block mb-2 text-sm font-medium text-slate-900"
-                                >
-                                    Country emoji
-                                </label>
-                                <input
-                                    type="text"
-                                    name="country-emoji"
-                                    className="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 outline-none"
-                                />
-                            </div>
-                            <div className="w-full">
-                                <label
-                                    htmlFor="country-continent"
-                                    className="block mb-2 text-sm font-medium text-slate-900"
-                                >
-                                    Country continent
-                                </label>
-                                <input
-                                    type="text"
-                                    name="country-continent"
-                                    className="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 outline-none"
-                                />
-                            </div>
+                            <Input
+                                label="Country code"
+                                type="text"
+                                name="country-code"
+                            />
+                            <Input
+                                label="Country name"
+                                type="text"
+                                name="country-name"
+                            />
+                            <Input
+                                label="Country emoji"
+                                type="text"
+                                name="country-emoji"
+                            />
+                            <Input
+                                label="Country continent"
+                                type="number"
+                                name="country-continent"
+                            />
                         </div>
                         <button
                             type="submit"
                             className="flex w-fit items-center gap-1.5 bg-amber-600 hover:bg-amber-700 cursor-pointer text-white px-2 py-1 rounded-md shadow-sm"
                         >
-                            Add{" "}
+                            Add 
                             <i className="fi fi-rr-plus-small flex h-full justify-center"></i>
                         </button>
                     </form>
