@@ -30,13 +30,12 @@ const ADD_COUNTRY = gql`
 
 export default function Home() {
     const [countries, setCountries] = useState<[Country] | null>(null);
-    const [isReloading, setIsReloading] = useState<boolean>(false);
 
     const [getCountries, { loading, error, data }] =
         useLazyQuery(GET_COUNTRIES);
     const [addCountry] = useMutation(ADD_COUNTRY);
 
-    function refetchCountries() {
+    function fetchCountries() {
         getCountries({
             fetchPolicy: "network-only",
             onCompleted: (data) => {
@@ -64,17 +63,13 @@ export default function Home() {
                 },
             },
             onCompleted: () => {
-                refetchCountries();
+                fetchCountries();
             },
         });
     }
 
     useEffect(() => {
-        getCountries({
-            onCompleted: (data) => {
-                setCountries(data.countries);
-            },
-        });
+        fetchCountries();
     }, []);
 
     if (loading) return <p>Loading...</p>;
@@ -82,7 +77,7 @@ export default function Home() {
         <>
             <Header />
 
-            <main className="container mx-auto flex flex-col gap-6">
+            <main className="container mx-auto flex flex-col gap-6 p-3 md:p-6">
                 <div className="border border-solid border-slate-200 p-4 rounded-md flex flex-col gap-6">
                     <h2 className="font-accent text-2xl text-slate-900">
                         Add a new country
@@ -92,7 +87,7 @@ export default function Home() {
                         className="flex flex-col gap-4"
                         onSubmit={handleSubmit}
                     >
-                        <div className="flex gap-4">
+                        <div className="flex flex-col md:flex-row gap-4">
                             <Input
                                 label="Country code"
                                 type="text"
@@ -118,7 +113,7 @@ export default function Home() {
                             type="submit"
                             className="flex w-fit items-center gap-1.5 bg-amber-600 hover:bg-amber-700 cursor-pointer text-white px-2 py-1 rounded-md shadow-sm"
                         >
-                            Add 
+                            Add
                             <i className="fi fi-rr-plus-small flex h-full justify-center"></i>
                         </button>
                     </form>
@@ -139,9 +134,12 @@ export default function Home() {
                                         <h3 className="font-medium text-xl text-slate-900">
                                             {country.emoji} {country.name}
                                         </h3>
-                                        <span className="text-slate-600">
-                                            {country.continent.name}
-                                        </span>
+                                        {country.continent &&
+                                            country.continent.name && (
+                                                <p className="text-slate-600">
+                                                    {country.continent.name}
+                                                </p>
+                                            )}
                                     </div>
                                     <div className="flex items-center">
                                         <i className="fi fi-rr-angle-right"></i>

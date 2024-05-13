@@ -23,6 +23,7 @@ export default function Input({
             <input
                 type={type}
                 value={value}
+                name={name}
                 onChange={onChange}
                 className="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 outline-none"
                 placeholder={placeholder}
